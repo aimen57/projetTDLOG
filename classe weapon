@@ -1,27 +1,80 @@
-class Weapon:
-  def __init__(self, ammunition: int, range: int):
-    self._ammunition = ammunition
-    self._range = range
-    
-  def fire_at(self, x:int, y:int, z:int):
-    print(x, y, z)
-    
-class lance_missiles_antisurface(Weapon):
-  def __init__(self, Surface, Rayon_dAction, NombreDeMunitions):
-        self._Surface=0
-        self._Rayon_dAction=30
-        self._NombreDeMunitions=40
-        
-class Lance_missiles_anti_air(Weapon):
-  def __init__(self, Air, Rayon_dAction, NombreDeMunitions):
-        self._Air>0
-        self._Rayon_dAction=40
-        self._NombreDeMunitions=50
 
-class Lance-torpilles(Weapon):
-  def __init__(self, Sous-marine, Rayon_dAction, NombreDeMunitions):
-        self._Sous-marine<0
-        self._Rayon_dAction=20
-        self._NombreDeMunitions=15
-        
- 
+from cmath import sqrt
+from re import X
+from typing_extensions import Self
+from xml.etree.ElementInclude import XINCLUDE
+import numpy as np
+
+
+
+class weapon :
+   def __init__(self, ammunitions , rang) :
+      self.ammunitions=ammunitions
+      self.range=rang
+      self.type="init"
+      if z=0:
+         self.type='surface'
+      elif z>0:
+         self.type="air"
+      else:
+         self..type="sousmarine"
+   
+   def fire_at(x:int,y:int,z=int):
+      if self.ammunitions == 0:
+         print ("(NoAmmunitionError)")
+      elif m==sqrt(x^2+y^2+z^2) > range :
+         self.ammunitions=self.ammunitions-1
+         print("OutOfRangeError")
+
+
+class Vessel (weapon): 
+   def __init__(self,coordinates , max_hits,weapon):
+      self.coordinates=coordinates
+      self.max_hits=max_hits
+      self.weapon=weapon
+      self.Armanent="no-armanent"
+      if z=0 and self.max_hits=6:
+         self.Armanent="anti-air"
+      elif (z=0 or z=-1) and self.max_hits =2:
+         self.Armanent="lance-torpilles"
+      elif z=0 and self.max_hits=5:
+         self.Armanent="lance-missiles antisurface"
+      elif z=0 and self.max_hits=4:
+         self.Armanent="lance-torpilles"
+      elif z=1 and self.max_hits=1 :
+         self.Armanent="lance-missiles antisurface"
+   def get_x(self.coordinates):
+      return self.coordinates[0]
+   def get_y(self.coordinates):
+      return self.coordinates[1]
+   def get_z(self.coordinates):
+      return self.coordinates[2]
+   def go_to(x,y,z):
+      if self.max_hits=0:
+         return str("DestroyedError")
+      self.coordinates=(x,y,z)
+      return self.coordinates
+   def fire_at(x,y,z):
+      if self.max_hits=0:
+         return str("DestroyedError")
+      super().fire_at(x,y,z)
+
+class espace(Vessel):
+   def __init__(self,L) -> None:
+      self.list=L
+      self.espaceA= np.zeros(100,100,3)
+      self.espaceA1=self.espaceA+self.list
+      self.somme_hits=sum([L[i].max_hits for i in range(len(L))])
+   #position est un tuple de (x,y,z)
+   def ajouter_vessel(V , position):
+      position_x=position(0)
+      position_y=position(1)
+      position_z=position(2)
+      assert (self.espaceA1[position_x][position_y][position_z]==0 and self.somme_hits + V.max_hits<=28 , "impossible")
+   
+   def recevoir (x,y,z):
+      if self.espaceA1[x][y][z]==0:
+         return False
+      else:
+         return true
+
