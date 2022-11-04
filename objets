@@ -1,0 +1,17 @@
+class lance_missiles_antisurface(Weapon):
+  def __init__(self, Surface, Rayon_dAction, NombreDeMunitions):
+        self._Surface=0
+        self._Rayon_dAction=30
+        self._NombreDeMunitions=40
+
+class Lance_missiles_anti_air(Weapon):
+  def __init__(self, Air, Rayon_dAction, NombreDeMunitions):
+        self._Air>0
+        self._Rayon_dAction=40
+        self._NombreDeMunitions=50
+
+class Lance-torpilles(Weapon):
+  def __init__(self, Sous-marine, Rayon_dAction, NombreDeMunitions):
+        self._Sous-marine<0
+        self._Rayon_dAction=20
+        self._NombreDeMunitions=15
