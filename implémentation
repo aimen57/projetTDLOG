@@ -1,17 +1,176 @@
-class lance_missiles_antisurface(Weapon):
-  def __init__(self, Surface, Rayon_dAction, NombreDeMunitions):
-        self._Surface=0
-        self._Rayon_dAction=30
-        self._NombreDeMunitions=40
+#!/usr/bin/env python
+# coding: utf-8
 
-class Lance_missiles_anti_air(Weapon):
-  def __init__(self, Air, Rayon_dAction, NombreDeMunitions):
-        self._Air>0
-        self._Rayon_dAction=40
-        self._NombreDeMunitions=50
+# In[55]:
 
-class Lance-torpilles(Weapon):
-  def __init__(self, Sous-marine, Rayon_dAction, NombreDeMunitions):
-        self._Sous-marine<0
-        self._Rayon_dAction=20
-        self._NombreDeMunitions=15
+
+from cmath import sqrt
+import numpy as np
+
+###TP1...................................................................................................................
+class Weapon:
+    def __init__(self,ammunitions,range):
+        self.ammunitions = ammunitions
+        self.range = range 
+        
+        assert isinstance(ammunitions,int), "Veuillez donner un entier"
+        assert isinstance(range,int),"Veuilez donner un entier"
+    def fire_at(self,x,y,z):
+        pass
+
+class Missile_antisurface(Weapon):
+    def __init__(self,ammunitions=40,range=30):
+        Weapon.__init__(self,ammunitions,range)
+    def fire_at(self,x,y,z):
+        if self.ammunitions ==0:
+            raise Exception("NoAmmunitionError")
+        if z != 0:
+            self.ammunitions =-1
+            raise Exception("OutOfRangeError","Nbr_munition:-->",self.ammunitions)
+        else:
+            return f"Bien, Munition {self.ammunitions-1}"
+        
+class Missile_anti_air(Weapon):
+    def __init__(self,ammunitions=50,range=30):
+        Weapon.__init__(self,ammunitions,range)
+    def fire_at(self,x,y,z):
+        if self.ammunitions ==0:
+            raise Exception("NoAmmunitionError")
+        if z <=0:
+            self.ammunitions -=1
+            raise Exception("OutOfRangeError","Nbr_munition:-->",self.ammunitions)
+        else:
+            return f"Bien, Munition {self.ammunitions-1}"
+
+class Torpille(Weapon):
+    def __init__(self,ammunitions=15,range=20):
+        super().__init__(ammunitions,range)
+    def fire_at(self,x,y,z):
+        if self.ammunitions ==0:
+            raise Exception("NoAmmunitionError")
+        elif z>0:
+            self.ammunitions -=1
+            raise Exception("OutOfRangeError","Nbr_munition:-->",self.ammunitions)
+        else:
+            return f"Bien, Munition {self.ammunitions-1}"
+        
+###TP2........................................................................................................................
+        
+class Vessel(Weapon):
+             
+    def __init__(self,coordinates:tuple,max_hits:int,weapon):
+        self.coordinates=coordinates
+        self.max_hits=max_hits
+        self.weapon=weapon
+        
+        
+    def go_to(self,x:int,y:int,z:int):
+        self.coordinates[0]==x
+        self.coordinates[1]==y
+        self.coordinates[2]==z
+
+    def get_coordinates(self):
+        return self.coordinates[0], self.coordinates[1], self.coordinates[2]
+    
+    def fire_at(self,x:int,y:int,z:int):
+        Weapon.fire_at(self,x,y,z)
+
+    
+class Cruiser(Vessel):
+    def __init__(self,x,y):
+        super().__init__((x,y,0),6,Missile_anti_air)
+    
+    def go_to(self,x:int,y:int,z:int):
+        Vessel.go_to(self,x,y,z)
+        if not z==0 :
+            raise  Exception("it's a Cruiser")
+            
+    def fire_at(self,x:int,y:int,z:int):
+        Missile_anti_air.fire_at(self,x,y,z)
+        if not self.max_hits>0:
+            raise Exception("your vessel is destroyed")    
+class Submarine(Vessel):
+    def __init__(self,x,y):
+        super().__init__((x,y,0),2,Torpille)
+    
+    def go_to(self,x:int,y:int,z:int):
+        super().go_to(x,y,z)
+        if not (z==-1 or z==0):
+            raise Exception("it's a Submarine")
+            
+    
+    def fire_at(self,x:int,y:int,z:int):
+        Torpille.fire_at(self,x,y,z)
+        if not self.max_hits>0:
+            raise Exception("your vessel is destroyed")
+
+class Fregate(Vessel):
+    def __init__(self,x,y):
+        super().__init__((x,y,0),5,Missile_antisurface)
+    
+    def go_to(self,x:int,y:int,z:int):
+        super().go_to(x,y,z)
+        if not z==0:
+            raise Exception("it's a Fregate")
+            
+    def fire_at(self,x:int,y:int,z:int):
+        Missile_antisurface.fire_at(self,x,y,z)
+        if not self.max_hits>0:
+            raise Exception("your vessel is destroyed")
+
+class Destroyer(Vessel):
+    def __init__(self,x,y):
+        super()._init_((x,y,0),4,Torpille)
+    
+    def go_to(self,x:int,y:int,z:int):
+        super().go_to(x,y,z)
+        if not z==0:
+            raise Exception("it's a Destroyer")
+            
+    def fire_at(self,x:int,y:int,z:int):
+        Torpille.fire_at(self,x,y,z)
+        if not self.max_hits>0:
+            raise Exception("your vessel is destroyed")
+
+class Aircraft(Vessel):
+    def __init__(self,x,y):
+        super().__init__((x,y,1),1,Missile_antisurface)
+    
+    def go_to(self,x:int,y:int,z:int):
+        super().go_to(x,y,z)
+        if not z==0:
+            raise Exception("it's a Aircraft")
+            
+    def fire_at(self,x:int,y:int,z:int):
+        Missile_antisurface.fire_at(self,x,y,z)
+        if not self.max_hits>0:
+            raise Exception("your vessel is destroyed")
+    
+
+class espace(Vessel) :
+    
+    def __init__(self) -> None:
+        self.liste_de_vaisseaux = []
+        self.somme_hits=sum([L[i].max_hits for i in range(len(L))])
+    def ajouter_vessel(self, vessel: Vessel) -> None:
+        if not self.disponible(vessel.coordinates):
+            print(f'The coordinate {vessel.coordinates} is occuped')
+        elif self.sum_max_hits() > 22:
+            print('No more space')
+        else :
+            self.liste_de_vaisseaux.append(vessel)
+
+    
+    def disponible(self,coordinates):
+        for vessel in self.liste_de_vaisseaux:
+            if vessel.get_coordinates()==coordinates:
+                return False
+        return True
+    
+    def recevoir(self, coordinates ) -> bool:
+        return self.is_available(coordinates)
+        pass
+    
+
+
+# In[ ]:
