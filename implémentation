@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[55]:
+# In[114]:
 
 
 from cmath import sqrt
@@ -86,7 +86,8 @@ class Cruiser(Vessel):
             raise  Exception("it's a Cruiser")
             
     def fire_at(self,x:int,y:int,z:int):
-        Missile_anti_air.fire_at(self,x,y,z)
+        p=Missile_anti_air()
+        p.fire_at(x,y,z)
         if not self.max_hits>0:
             raise Exception("your vessel is destroyed")    
 class Submarine(Vessel):
@@ -100,7 +101,8 @@ class Submarine(Vessel):
             
     
     def fire_at(self,x:int,y:int,z:int):
-        Torpille.fire_at(self,x,y,z)
+        p=Torpille()
+        p.fire_at(x,y,z)
         if not self.max_hits>0:
             raise Exception("your vessel is destroyed")
 
@@ -114,7 +116,8 @@ class Fregate(Vessel):
             raise Exception("it's a Fregate")
             
     def fire_at(self,x:int,y:int,z:int):
-        Missile_antisurface.fire_at(self,x,y,z)
+        p=Missile_antisurface()
+        p.fire_at(x,y,z)
         if not self.max_hits>0:
             raise Exception("your vessel is destroyed")
 
@@ -128,7 +131,8 @@ class Destroyer(Vessel):
             raise Exception("it's a Destroyer")
             
     def fire_at(self,x:int,y:int,z:int):
-        Torpille.fire_at(self,x,y,z)
+        p=Torpille()
+        p.fire_at(x,y,z)
         if not self.max_hits>0:
             raise Exception("your vessel is destroyed")
 
@@ -142,7 +146,8 @@ class Aircraft(Vessel):
             raise Exception("it's a Aircraft")
             
     def fire_at(self,x:int,y:int,z:int):
-        Missile_antisurface.fire_at(self,x,y,z)
+        p=Missile_antisurface()
+        p.fire_at(x,y,z)
         if not self.max_hits>0:
             raise Exception("your vessel is destroyed")
     
@@ -151,11 +156,12 @@ class espace(Vessel) :
     
     def __init__(self) -> None:
         self.liste_de_vaisseaux = []
-        self.somme_hits=sum([L[i].max_hits for i in range(len(L))])
-    def ajouter_vessel(self, vessel: Vessel) -> None:
+        self.sum_max_hits=sum([self.liste_de_vaisseaux[i].max_hits for i in range(len(self.liste_de_vaisseaux))])
+        
+    def ajouter_vessel(self, vessel) -> None:
         if not self.disponible(vessel.coordinates):
             print(f'The coordinate {vessel.coordinates} is occuped')
-        elif self.sum_max_hits() > 22:
+        elif self.sum_max_hits > 22:
             print('No more space')
         else :
             self.liste_de_vaisseaux.append(vessel)
@@ -168,9 +174,19 @@ class espace(Vessel) :
         return True
     
     def recevoir(self, coordinates ) -> bool:
-        return self.is_available(coordinates)
+        return self.disponible(coordinates)
         pass
     
 
 
+# In[118]:
+
+
+
+
+
 # In[ ]:
+
+
+
+
